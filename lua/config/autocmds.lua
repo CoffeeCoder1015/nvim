@@ -1,8 +1,3 @@
--- This is only custom remaps of default neovim key bindings
--- Other plugin configurations are elsewhere
-require("my.set")
-require("my.keymap")
-
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -16,3 +11,13 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.highlight.on_yank()
 	end,
 })
+
+-- Example autocmd that says ello whenever a new buffer is added
+-- vim.api.nvim_create_autocmd({ "BufAdd" }, {
+-- 	desc = "Say hello when opening a file",
+-- 	group = vim.api.nvim_create_augroup("Test", { clear = true }),
+-- 	callback = function()
+-- 		print("ello")
+-- 	end,
+-- })
+--
