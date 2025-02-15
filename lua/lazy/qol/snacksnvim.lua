@@ -4,9 +4,7 @@ return {
 	vscode = true,
 	---@type snacks.Config
 	opts = {
-		scroll = {
-			enabled = false,
-		},
+		scroll = { enabled = false, },
 		dashboard = {
 			preset = {
 				header = [[
