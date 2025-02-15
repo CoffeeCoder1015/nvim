@@ -1,0 +1,12 @@
+{
+  "extras": [
+    "lazyvim.plugins.extras.coding.blink",
+    "lazyvim.plugins.extras.coding.luasnip",
+    "lazyvim.plugins.extras.editor.telescope",
+    "lazyvim.plugins.extras.ui.indent-blankline"
+  ],
+  "news": {
+    "NEWS.md": "10960"
+  },
+  "version": 7
+}
