@@ -26,10 +26,6 @@ require("lazy").setup({
 			},
 		},
 		{
-			"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
-
-			-- "gc" to comment visual regions/lines
-			{ "numToStr/Comment.nvim", opts = {} },
 			{ -- You can easily change to a different colorscheme.
 				-- Change the name of the colorscheme plugin below, and then
 				-- change the command in the config to whatever the name of that colorscheme is.
@@ -47,16 +43,6 @@ require("lazy").setup({
 					vim.cmd.hi("Comment gui=none")
 				end,
 			},
-
-			-- Highlight todo, notes, etc in comments
-			{
-				"folke/todo-comments.nvim",
-				event = "VimEnter",
-				dependencies = { "nvim-lua/plenary.nvim" },
-				opts = { signs = false },
-				vscode = true,
-			},
-
 		},
 		-- import/override with your plugins
 		{ import = "lazy.plugins" },
