@@ -88,4 +88,4 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 
 -- auto change directory
-vim.g.autochdir = true
+vim.opt.autochdir = true
