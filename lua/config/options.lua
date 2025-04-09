@@ -14,7 +14,7 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 -- Set default shell
-vim.o.shell = "powershell"
+vim.o.shell = "pwsh"
 vim.o.shellcmdflag =
 	"-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues[''Out-File:Encoding'']=''utf8'';Remove-Alias -Force -ErrorAction SilentlyContinue tee;"
 vim.o.shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
