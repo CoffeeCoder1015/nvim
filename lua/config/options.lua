@@ -14,11 +14,14 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 -- Set default shell
-vim.o.shell = "pwsh"
-vim.o.shellcmdflag =
-	"-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues[''Out-File:Encoding'']=''utf8'';Remove-Alias -Force -ErrorAction SilentlyContinue tee;"
-vim.o.shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
-vim.o.shellpipe = '2>&1 | %%{ "$_" } | tee %s; exit $LastExitCode'
+-- Use pwsh if available; otherwise fall back to the legacy PowerShell.
+vim.opt.shell = (vim.fn.executable("pwsh") == 1) and "pwsh" or "powershell"
+-- Set shell command flags separately.
+vim.opt.shellcmdflag = "-NoLogo -ExecutionPolicy RemoteSigned -Command"
+vim.opt.shellredir = "2>&1 | Out-File %s; exit $LastExitCode"
+vim.opt.shellpipe = "2>&1 | tee %s; exit $LastExitCode"
+vim.opt.shellquote = ""
+vim.opt.shellxquote = ""
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
