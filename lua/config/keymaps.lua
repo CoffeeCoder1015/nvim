@@ -45,3 +45,44 @@ vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank current line to OS clipbo
 vim.keymap.set({ "n", "v" }, "<leader>sNh", function()
 	Snacks.notifier.show_history()
 end, { desc = "show notification history" })
+
+-- Calculator
+-- original_expression -> original_expression = answer
+vim.keymap.set("v", "<leader>cc", function()
+	-- 1. Get visual selection start/end
+	local s_pos = vim.fn.getpos("'<") -- start of visual selection
+	local e_pos = vim.fn.getpos("'>") -- end of visual selection
+
+	-- 2. Convert to 0-based
+	local bufnr = vim.api.nvim_get_current_buf()
+	local start_row = s_pos[2] - 1
+	local start_col = s_pos[3] - 1
+	local end_row = e_pos[2] - 1
+	local end_col = e_pos[3]
+
+	-- 3. Fetch lines in range
+	local lines = vim.api.nvim_buf_get_lines(bufnr, start_row, end_row + 1, false)
+
+	-- 4. Trim first/last lines to selection columns
+	if #lines == 1 then
+		lines[1] = lines[1]:sub(start_col + 1, end_col)
+	else
+		lines[1] = lines[1]:sub(start_col + 1)
+		lines[#lines] = lines[#lines]:sub(1, end_col)
+	end
+
+	-- 5. Join into one expression string
+	local expr = table.concat(lines, "\n")
+
+	-- 6. Safely evaluate
+	local ok, result = pcall(vim.fn.eval, expr)
+	if not ok then
+		result = "ERROR"
+	end
+
+	-- 7. Prepare replacement
+	local replacement = string.format("%s = %s", expr, result)
+
+	-- 8. Replace the selected lines
+	vim.api.nvim_buf_set_lines(bufnr, start_row, end_row + 1, false, { replacement })
+end, { desc = "Evaluate visual selection as math", noremap = true })
