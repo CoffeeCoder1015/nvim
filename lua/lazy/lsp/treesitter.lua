@@ -30,6 +30,7 @@ return {
 		config = function(_, opts)
 			-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
+			require("config.treesittercli")()  -- automatically install CLI if missing
 			require("nvim-treesitter.config").setup(opts)
 			-- Prefer git instead of curl in order to improve connectivity in some environments
 			require("nvim-treesitter.install").prefer_git = true
