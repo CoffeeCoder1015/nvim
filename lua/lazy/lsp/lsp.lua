@@ -218,7 +218,16 @@ return {
 						-- by the server configuration above. Useful when disabling
 						-- certain features of an LSP (for example, turning off formatting for tsserver)
 						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
+						
+						if vim.fn.has("nvim-0.11") == 1 and vim.lsp.config then
+							-- Merge in default nvim-lspconfig commands/roots if needed for native setup
+							local cfg = require("lspconfig.configs")[server_name]
+							local final_config = vim.tbl_deep_extend("keep", server, cfg and cfg.default_config or {})
+							vim.lsp.config(server_name, final_config)
+							vim.lsp.enable(server_name)
+						else
+							require("lspconfig")[server_name].setup(server)
+						end
 					end,
 				},
 			})

@@ -16,16 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	spec = {
-		-- add LazyVim and import its plugins
-		{
-			"LazyVim/LazyVim",
-			import = "lazyvim.plugins",
-			opts = {
-				colorscheme = function()
-					require("catppuccin").load()
-				end,
-			},
-		},
+		-- add Catppuccin theme
 		{
 			"catppuccin/nvim",
 			name = "catppuccin",
@@ -61,10 +52,15 @@ require("lazy").setup({
 					},
 				},
 			},
+			config = function(_, opts)
+				require("catppuccin").setup(opts)
+				vim.cmd.colorscheme("catppuccin")
+			end,
 		},
 		-- import/override with your plugins
 		{ import = "lazy.plugins" },
 		{ import = "lazy.qol" },
+		{ import = "lazy.ui" },
 		{ import = "lazy.file" },
 		{ import = "lazy.git" },
 		{ import = "lazy.lsp" },

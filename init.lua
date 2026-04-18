@@ -1,7 +1,10 @@
 -- Custom configurations for neovim
+-- Load options first (before plugins, so mapleader is set correctly)
+require("config.options")
+
+-- Bootstrap lazy.nvim and load plugins
 require("lazy.lazy")
 
--- -- 4 space indent vim.opt.tabstop = 4
--- vim.opt.softtabstop = 4
--- vim.opt.shiftwidth = 4
--- vim.opt.expandtab = true
+-- Load keymaps and autocmds after plugins
+require("config.keymaps")
+require("config.autocmds")
