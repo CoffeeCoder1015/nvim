@@ -39,11 +39,11 @@ its own git commit.
 
 ## 4. Formatting Controls
 
-- [ ] Replace unconditional Conform format-on-save with global and buffer toggles.
-- [ ] Add format commands and format-info command.
-- [ ] Add `formatexpr` equivalent for `gq`.
-- [ ] Preserve explicit formatter choices for Lua, shell, and fish.
-- [ ] Keep LSP formatting fallback behavior.
+- [x] Replace unconditional Conform format-on-save with global and buffer toggles.
+- [x] Add format commands and format-info command.
+- [x] Add `formatexpr` equivalent for `gq`.
+- [x] Preserve explicit formatter choices for Lua, shell, and fish.
+- [x] Keep LSP formatting fallback behavior.
 
 ## 5. Snippets
 

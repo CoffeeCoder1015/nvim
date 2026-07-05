@@ -16,12 +16,15 @@ return {
       {
         "<leader>cf",
         function()
-          require("conform").format({ timeout_ms = 3000, lsp_format = "fallback" })
+          require("config.format").format({ force = true })
         end,
         mode = { "n", "x" },
         desc = "Format Buffer",
       },
     },
+    config = function(_, opts)
+      require("conform").setup(opts)
+    end,
     opts = {
       default_format_opts = {
         timeout_ms = 3000,
@@ -39,13 +42,7 @@ return {
       },
     },
     init = function()
-      -- Format on save
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = vim.api.nvim_create_augroup("conform-format-on-save", { clear = true }),
-        callback = function(args)
-          require("conform").format({ bufnr = args.buf, timeout_ms = 3000, lsp_format = "fallback" })
-        end,
-      })
+      require("config.format").setup()
     end,
   },
 }
