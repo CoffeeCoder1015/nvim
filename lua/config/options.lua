@@ -40,7 +40,7 @@ vim.g.have_nerd_font = false
 
 -- LazyVim options
 opt.autowrite = true
-opt.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus"
+opt.clipboard = ""
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 2
 opt.confirm = true

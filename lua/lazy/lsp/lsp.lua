@@ -1,6 +1,7 @@
 return {
 	{ -- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
+		cond = not vim.g.vscode,
 		dependencies = {
 			-- Automatically install LSPs and related tools to stdpath for Neovim
 			{ "mason-org/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
@@ -153,6 +154,7 @@ return {
 			-- capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 			-- NOTE: New
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
+			capabilities.offsetEncoding = { "utf-16" }
 
 			-- Enable the following language servers
 			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -168,7 +170,11 @@ return {
 				gopls = {},
 				-- pyright = {},
 				rust_analyzer = {},
-				clangd = {},
+				clangd = {
+					capabilities = {
+						offsetEncoding = { "utf-16" },
+					},
+				},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
 				-- Some languages (like typescript) have entire language plugins that can be useful:

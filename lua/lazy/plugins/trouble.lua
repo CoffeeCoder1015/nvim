@@ -1,5 +1,6 @@
 return {
   "folke/trouble.nvim",
+  cond = not vim.g.vscode,
   cmd = { "TroubleToggle", "Trouble" },
   opts = { use_diagnostic_signs = true },
   keys = {

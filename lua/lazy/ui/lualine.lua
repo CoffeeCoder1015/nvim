@@ -1,5 +1,6 @@
 return {
   "nvim-lualine/lualine.nvim",
+  cond = not vim.g.vscode,
   event = "VeryLazy",
   init = function()
     vim.g.lualine_laststatus = vim.o.laststatus
@@ -10,6 +11,14 @@ return {
     end
   end,
   opts = function()
+    local function macro_recording()
+      local register = vim.fn.reg_recording()
+      if register == "" then
+        return ""
+      end
+      return "recording @" .. register
+    end
+
     return {
       options = {
         theme = "auto",
@@ -33,12 +42,21 @@ return {
           { "filename", path = 1 },
         },
         lualine_x = {
-          -- snip stylua config and other stuff, keep it clean
+          macro_recording,
         },
         lualine_y = { "progress" },
         lualine_z = { "location" },
       },
       extensions = { "neo-tree", "lazy" },
     }
+  end,
+  config = function(_, opts)
+    require("lualine").setup(opts)
+    vim.api.nvim_create_autocmd({ "RecordingEnter", "RecordingLeave" }, {
+      group = vim.api.nvim_create_augroup("lualine_macro_recording", { clear = true }),
+      callback = function()
+        require("lualine").refresh({ place = { "statusline" } })
+      end,
+    })
   end,
 }

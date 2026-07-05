@@ -176,7 +176,11 @@ map("n", "<leader>nrw", vim.cmd.Ex, { desc = "open up netrw" })
 
 -- yank into system
 map({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank selection into OS clipboard" })
-map("n", "<leader>Y", '"+Y', { desc = "Yank current line to OS clipbord" })
+map("n", "<leader>Y", '"+Y', { desc = "Yank current line to OS clipboard" })
+
+-- paste from system
+map({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from OS clipboard" })
+map({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste from OS clipboard (above)" })
 
 -- show notif history
 map({ "n", "v" }, "<leader>sNh", function()

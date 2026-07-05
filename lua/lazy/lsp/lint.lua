@@ -1,6 +1,7 @@
 return {
   {
     "mfussenegger/nvim-lint",
+    cond = not vim.g.vscode,
     event = { "BufReadPost", "BufWritePost", "InsertLeave" },
     opts = {
       events = { "BufWritePost", "BufReadPost", "InsertLeave" },
