@@ -83,12 +83,12 @@ its own git commit.
 
 ## 9. Snacks And Noice Glue
 
-- [ ] Re-enable Noice markdown overrides if compatible with current Neovim/plugins.
-- [ ] Add picker-aware notification history.
-- [ ] Add dashboard picker bridge.
-- [ ] Decide whether Snacks scroll should be enabled.
-- [ ] Add profiler toggles if useful.
-- [ ] Keep VSCode-Neovim conditionals explicit.
+- [x] Re-enable Noice markdown overrides if compatible with current Neovim/plugins.
+- [x] Add picker-aware notification history.
+- [x] Add dashboard picker bridge.
+- [x] Decide whether Snacks scroll should be enabled.
+- [x] Add profiler toggles if useful.
+- [x] Keep VSCode-Neovim conditionals explicit.
 
 ## 10. Language Extras
 

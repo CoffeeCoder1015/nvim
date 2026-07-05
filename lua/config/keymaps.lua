@@ -190,7 +190,11 @@ map({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste from OS clipboard (above)"
 
 -- show notif history
 map({ "n", "v" }, "<leader>sNh", function()
-  Snacks.notifier.show_history()
+  if Snacks.picker and Snacks.picker.notifications then
+    Snacks.picker.notifications()
+  else
+    Snacks.notifier.show_history()
+  end
 end, { desc = "show notification history" })
 
 -- Calculator

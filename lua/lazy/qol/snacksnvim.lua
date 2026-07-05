@@ -25,6 +25,13 @@ local indent_exclude = {
   trouble = true,
 }
 
+local function notification_history()
+  if Snacks.picker and Snacks.picker.notifications then
+    return Snacks.picker.notifications()
+  end
+  return Snacks.notifier.show_history()
+end
+
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -74,6 +81,8 @@ return {
     },
     input = { enabled = true },
     notifier = { enabled = true },
+    picker = { enabled = true },
+    profiler = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
     scroll = { enabled = false },
@@ -95,7 +104,10 @@ return {
   keys = {
     { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
     { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
-    { "<leader>n", function() Snacks.notifier.show_history() end, desc = "Notification History" },
+    { "<leader>n", notification_history, desc = "Notification History" },
     { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
+    { "<leader>pp", function() Snacks.toggle.profiler():toggle() end, desc = "Toggle Profiler" },
+    { "<leader>ph", function() Snacks.toggle.profiler_highlights():toggle() end, desc = "Toggle Profiler Highlights" },
+    { "<leader>ps", function() Snacks.profiler.scratch() end, desc = "Profiler Scratch Buffer" },
   },
 }
