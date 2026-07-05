@@ -8,6 +8,23 @@ local function term_nav(dir)
   end
 end
 
+local indent_exclude = {
+  Trouble = true,
+  alpha = true,
+  dashboard = true,
+  help = true,
+  lazy = true,
+  mason = true,
+  ["neo-tree"] = true,
+  notify = true,
+  snacks_dashboard = true,
+  snacks_notif = true,
+  snacks_terminal = true,
+  snacks_win = true,
+  toggleterm = true,
+  trouble = true,
+}
+
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -46,7 +63,15 @@ return {
         { section = "startup" },
       },
     },
-    indent = { enabled = true },
+    indent = {
+      enabled = true,
+      filter = function(buf)
+        return vim.g.snacks_indent ~= false
+          and vim.b[buf].snacks_indent ~= false
+          and vim.bo[buf].buftype == ""
+          and not indent_exclude[vim.bo[buf].filetype]
+      end,
+    },
     input = { enabled = true },
     notifier = { enabled = true },
     quickfile = { enabled = true },

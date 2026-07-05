@@ -47,18 +47,18 @@ its own git commit.
 
 ## 5. Snippets
 
-- [ ] Choose LuaSnip, native snippets, or mini.snippets.
-- [ ] If LuaSnip: load friendly snippets and local `snippets/`.
-- [ ] If LuaSnip: wire Blink to the LuaSnip preset.
-- [ ] Stop active snippets on Escape.
-- [ ] Remove stale `lazyvim.json` expectations once the choice is explicit.
+- [x] Choose LuaSnip, native snippets, or mini.snippets.
+- [x] Load friendly snippets and local `snippets/` through Blink native snippets.
+- [x] Wire Blink to the native snippet preset.
+- [x] Stop active snippets on Escape.
+- [x] Remove stale `lazyvim.json` expectations once the choice is explicit.
 
 ## 6. Indent Guides
 
-- [ ] Choose Snacks indent or `indent-blankline.nvim`.
-- [ ] If using `indent-blankline.nvim`, disable Snacks indent.
-- [ ] Add exclusions for dashboards, help, terminal, lazy, Mason, Trouble, and similar UIs.
-- [ ] Add an indent-guide toggle.
+- [x] Choose Snacks indent or `indent-blankline.nvim`.
+- [x] Keep Snacks indent enabled instead of adding `indent-blankline.nvim`.
+- [x] Add exclusions for dashboards, help, terminal, lazy, Mason, Trouble, and similar UIs.
+- [x] Add an indent-guide toggle.
 
 ## 7. Neo-tree
 
