@@ -27,17 +27,34 @@ opt.softtabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 
+local function first_executable(candidates)
+  for _, candidate in ipairs(candidates) do
+    local path = candidate and vim.fn.exepath(candidate) or ""
+    if path ~= "" then
+      return path
+    end
+    if candidate and candidate ~= "" and vim.fn.executable(candidate) == 1 then
+      return candidate
+    end
+  end
+end
+
 -- Prefer PowerShell Core on Windows when installed; otherwise use Windows PowerShell.
 if vim.fn.has("win32") == 1 then
-  opt.shell = vim.fn.exepath("pwsh.exe")
-  if opt.shell:get() == "" then
-    opt.shell = vim.fn.exepath("powershell.exe")
+  local shell = first_executable({ "pwsh.exe", "powershell.exe" })
+  if shell then
+    opt.shell = shell
   end
   opt.shellcmdflag = "-NoLogo -ExecutionPolicy RemoteSigned -Command"
   opt.shellredir = "2>&1 | Out-File %s; exit $LastExitCode"
   opt.shellpipe = "2>&1 | tee %s; exit $LastExitCode"
   opt.shellquote = ""
   opt.shellxquote = ""
+elseif vim.o.shell == "" or vim.fn.executable(vim.o.shell) == 0 then
+  local shell = first_executable({ vim.env.SHELL, "bash", "sh" })
+  if shell then
+    opt.shell = shell
+  end
 end
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
