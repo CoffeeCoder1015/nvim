@@ -27,13 +27,15 @@ opt.softtabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 
--- Set default shell (Windows/PowerShell)
-opt.shell = (vim.fn.executable("pwsh") == 1) and "pwsh" or "powershell"
-opt.shellcmdflag = "-NoLogo -ExecutionPolicy RemoteSigned -Command"
-opt.shellredir = "2>&1 | Out-File %s; exit $LastExitCode"
-opt.shellpipe = "2>&1 | tee %s; exit $LastExitCode"
-opt.shellquote = ""
-opt.shellxquote = ""
+-- Prefer PowerShell Core on Windows; keep Neovim's platform defaults elsewhere.
+if vim.fn.has("win32") == 1 then
+  opt.shell = "pwsh"
+  opt.shellcmdflag = "-NoLogo -ExecutionPolicy RemoteSigned -Command"
+  opt.shellredir = "2>&1 | Out-File %s; exit $LastExitCode"
+  opt.shellpipe = "2>&1 | tee %s; exit $LastExitCode"
+  opt.shellquote = ""
+  opt.shellxquote = ""
+end
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
