@@ -168,10 +168,11 @@ return { { -- Fuzzy Finder (files, lsp, etc)
         vim.keymap.set("n", "<leader>fg", builtin.git_files, { desc = "Find Files (git-files)" })
         vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Recent" })
         vim.keymap.set("n", "<leader>fR", function() builtin.oldfiles({ cwd = vim.uv.cwd() }) end, { desc = "Recent (cwd)" })
+        vim.keymap.set("n", "<leader>:", builtin.command_history, { desc = "Command History" })
 
         -- git
         vim.keymap.set("n", "<leader>gc", builtin.git_commits, { desc = "Commits" })
-        vim.keymap.set("n", "<leader>gl", builtin.git_commits, { desc = "Commits" })
+        vim.keymap.set("n", "<leader>gl", function() Snacks.picker.git_log({ cwd = root.git_root() }) end, { desc = "Git Log" })
         vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Status" })
         vim.keymap.set("n", "<leader>gS", builtin.git_stash, { desc = "Git Stash" })
 

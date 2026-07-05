@@ -5,6 +5,18 @@
 local map = vim.keymap.set
 local root = require("config.root")
 
+local function delete_invisible_buffers()
+  local visible = {}
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    visible[vim.api.nvim_win_get_buf(win)] = true
+  end
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.bo[buf].buflisted and not visible[buf] then
+      Snacks.bufdelete(buf)
+    end
+  end
+end
+
 -- better up/down (wraps on long lines)
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -40,6 +52,7 @@ map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 map("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 map("n", "<leader>bd", function() Snacks.bufdelete() end, { desc = "Delete Buffer" })
 map("n", "<leader>bo", function() Snacks.bufdelete.other() end, { desc = "Delete Other Buffers" })
+map("n", "<leader>bi", delete_invisible_buffers, { desc = "Delete Invisible Buffers" })
 map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 
 -- Clear search and stop snippet on escape
@@ -93,6 +106,18 @@ map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
 -- quickfix / location list
+map("n", "<leader>xl", function()
+  local ok, err = pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
+  if not ok and err then
+    vim.notify(err, vim.log.levels.ERROR)
+  end
+end, { desc = "Location List" })
+map("n", "<leader>xq", function()
+  local ok, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
+  if not ok and err then
+    vim.notify(err, vim.log.levels.ERROR)
+  end
+end, { desc = "Quickfix List" })
 map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 
@@ -130,6 +155,8 @@ Snacks.toggle.dim():map("<leader>uD")
 Snacks.toggle.animate():map("<leader>ua")
 Snacks.toggle.indent():map("<leader>ug")
 Snacks.toggle.scroll():map("<leader>uS")
+Snacks.toggle.profiler():map("<leader>dpp")
+Snacks.toggle.profiler_highlights():map("<leader>dph")
 
 if vim.lsp.inlay_hint then
   Snacks.toggle.inlay_hints():map("<leader>uh")
@@ -141,6 +168,15 @@ if vim.fn.executable("lazygit") == 1 then
   map("n", "<leader>gG", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
 end
 
+map("n", "<leader>gL", function() Snacks.picker.git_log() end, { desc = "Git Log (cwd)" })
+map("n", "<leader>gb", function() Snacks.picker.git_log_line() end, { desc = "Git Blame Line" })
+map("n", "<leader>gf", function() Snacks.picker.git_log_file() end, { desc = "Git Current File History" })
+map("n", "<leader>gl", function() Snacks.picker.git_log({ cwd = root.git_root() }) end, { desc = "Git Log" })
+map({ "n", "x" }, "<leader>gB", function() Snacks.gitbrowse() end, { desc = "Git Browse (open)" })
+map({ "n", "x" }, "<leader>gY", function()
+  Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false })
+end, { desc = "Git Browse (copy)" })
+
 -- quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
 
@@ -151,8 +187,8 @@ map("n", "<leader>uI", function() vim.treesitter.inspect_tree() vim.api.nvim_inp
 -- floating terminal
 map("n", "<leader>fT", function() Snacks.terminal() end, { desc = "Terminal (cwd)" })
 map("n", "<leader>ft", function() Snacks.terminal(nil, { cwd = root.root() }) end, { desc = "Terminal (Root Dir)" })
-map({"n","t"}, "<c-/>", function() Snacks.terminal(nil, { cwd = root.root() }) end, { desc = "Terminal (Root Dir)" })
-map({"n","t"}, "<c-_>", function() Snacks.terminal(nil, { cwd = root.root() }) end, { desc = "which_key_ignore" })
+map({"n","t"}, "<c-/>", function() Snacks.terminal.focus(nil, { cwd = root.root() }) end, { desc = "Terminal (Root Dir)" })
+map({"n","t"}, "<c-_>", function() Snacks.terminal.focus(nil, { cwd = root.root() }) end, { desc = "which_key_ignore" })
 
 -- Exit terminal mode
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
