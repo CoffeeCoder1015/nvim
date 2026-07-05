@@ -62,13 +62,13 @@ its own git commit.
 
 ## 7. Neo-tree
 
-- [ ] Add root and cwd explorer mappings.
-- [ ] Add filesystem, buffers, and git status sources.
-- [ ] Follow the current file without binding the explorer to cwd.
-- [ ] Enable file watchers where appropriate.
-- [ ] Add copy path, system open, preview, and rename hooks.
-- [ ] Refresh git status after lazygit.
-- [ ] Handle directory arguments on startup.
+- [x] Add root and cwd explorer mappings.
+- [x] Add filesystem, buffers, and git status sources.
+- [x] Follow the current file without binding the explorer to cwd.
+- [x] Enable file watchers where appropriate.
+- [x] Add copy path, system open, preview, and rename hooks.
+- [x] Refresh git status after lazygit.
+- [x] Handle directory arguments on startup.
 
 ## 8. Statusline And UI Feedback
 
