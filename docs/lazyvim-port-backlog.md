@@ -72,14 +72,14 @@ its own git commit.
 
 ## 8. Statusline And UI Feedback
 
-- [ ] Add root display and pretty path to lualine.
-- [ ] Add Noice command/mode status.
-- [ ] Add lazy update status only if update checking remains manual and non-noisy.
-- [ ] Add gitsigns diff status.
-- [ ] Add DAP status when DAP is loaded.
-- [ ] Add Trouble symbol breadcrumb.
-- [ ] Keep macro recording feedback visible.
-- [ ] Decide whether to enable Snacks statuscolumn.
+- [x] Add root display and pretty path to lualine.
+- [x] Add Noice command/mode status.
+- [x] Add lazy update status only if update checking remains manual and non-noisy.
+- [x] Add gitsigns diff status.
+- [x] Add DAP status when DAP is loaded.
+- [x] Add Trouble symbol breadcrumb.
+- [x] Keep macro recording feedback visible.
+- [x] Decide whether to enable Snacks statuscolumn.
 
 ## 9. Snacks And Noice Glue
 
