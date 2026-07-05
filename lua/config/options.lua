@@ -27,9 +27,12 @@ opt.softtabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 
--- Prefer PowerShell Core on Windows; keep Neovim's platform defaults elsewhere.
+-- Prefer PowerShell Core on Windows when installed; otherwise use Windows PowerShell.
 if vim.fn.has("win32") == 1 then
-  opt.shell = "pwsh"
+  opt.shell = vim.fn.exepath("pwsh.exe")
+  if opt.shell:get() == "" then
+    opt.shell = vim.fn.exepath("powershell.exe")
+  end
   opt.shellcmdflag = "-NoLogo -ExecutionPolicy RemoteSigned -Command"
   opt.shellredir = "2>&1 | Out-File %s; exit $LastExitCode"
   opt.shellpipe = "2>&1 | tee %s; exit $LastExitCode"
