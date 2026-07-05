@@ -16,10 +16,6 @@ return {
 	opts = {
 		snippets = {
 			preset = "default",
-			opts = {
-				friendly_snippets = true,
-				search_paths = { vim.fn.stdpath("config") .. "/snippets" },
-			},
 		},
 		-- 'default' for mappings similar to built-in completion
 		-- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
