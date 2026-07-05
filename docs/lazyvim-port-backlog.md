@@ -101,9 +101,9 @@ its own git commit.
 
 ## 11. Utility Extras
 
-- [ ] Add Gitsigns toggle.
-- [ ] Add Trouble-aware quickfix navigation.
-- [ ] Add `GrugFarWithin`.
-- [ ] Consider `mini.hipatterns` for color and pattern highlighting.
-- [ ] Consider project picker, REST client, startuptime, Octo/GitHub, Chezmoi, or GitUI
+- [x] Add Gitsigns toggle.
+- [x] Add Trouble-aware quickfix navigation.
+- [x] Add `GrugFarWithin`.
+- [x] Consider `mini.hipatterns` for color and pattern highlighting.
+- [x] Consider project picker, REST client, startuptime, Octo/GitHub, Chezmoi, or GitUI
       only if they match real workflows.
