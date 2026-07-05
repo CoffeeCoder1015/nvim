@@ -28,14 +28,14 @@ its own git commit.
 
 ## 3. LSP Defaults
 
-- [ ] Move from Kickstart-style LSP mappings to a shared LazyVim-style default map set.
-- [ ] Configure global diagnostics: signs, virtual text, underline, severity sorting.
-- [ ] Add workspace file-operation capabilities.
-- [ ] Add capability-gated mappings for hover, signature help, definitions, references,
+- [x] Move from Kickstart-style LSP mappings to a shared LazyVim-style default map set.
+- [x] Configure global diagnostics: signs, virtual text, underline, severity sorting.
+- [x] Add workspace file-operation capabilities.
+- [x] Add capability-gated mappings for hover, signature help, definitions, references,
       rename, code actions, source actions, organize imports, codelens, and file rename.
-- [ ] Enable inlay hints when supported.
-- [ ] Enable LSP folding when supported.
-- [ ] Preserve local clangd offset-encoding behavior.
+- [x] Enable inlay hints when supported.
+- [x] Enable LSP folding when supported.
+- [x] Preserve local clangd offset-encoding behavior.
 
 ## 4. Formatting Controls
 
