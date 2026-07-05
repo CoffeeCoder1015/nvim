@@ -19,12 +19,12 @@ its own git commit.
 
 ## 2. Picker Ergonomics
 
-- [ ] Decide whether the main picker layer is Telescope or Snacks picker.
-- [ ] Add root and cwd variants for files, grep, oldfiles, buffers, and config files.
-- [ ] Add hidden/no-ignore affordances where supported.
-- [ ] Add git file/log/status pickers.
-- [ ] Add Trouble handoff from picker results where useful.
-- [ ] Add `vim.ui.select`/`vim.ui.input` integration if keeping Telescope.
+- [x] Decide whether the main picker layer is Telescope or Snacks picker.
+- [x] Add root and cwd variants for files, grep, oldfiles, buffers, and config files.
+- [x] Add hidden/no-ignore affordances where supported.
+- [x] Add git file/log/status pickers.
+- [x] Add Trouble handoff from picker results where useful.
+- [x] Add `vim.ui.select`/`vim.ui.input` integration if keeping Telescope.
 
 ## 3. LSP Defaults
 

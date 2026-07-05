@@ -19,6 +19,20 @@ return { { -- Fuzzy Finder (files, lsp, etc)
             end,
         },
         { "nvim-telescope/telescope-ui-select.nvim" },
+        {
+            "stevearc/dressing.nvim",
+            lazy = true,
+            init = function()
+                vim.ui.select = function(...)
+                    require("lazy").load({ plugins = { "dressing.nvim" } })
+                    return vim.ui.select(...)
+                end
+                vim.ui.input = function(...)
+                    require("lazy").load({ plugins = { "dressing.nvim" } })
+                    return vim.ui.input(...)
+                end
+            end,
+        },
 
         -- Useful for getting pretty icons, but requires a Nerd Font.
         { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
@@ -46,16 +60,92 @@ return { { -- Fuzzy Finder (files, lsp, etc)
 
         -- [[ Configure Telescope ]]
         -- See `:help telescope` and `:help telescope.setup()`
+        local builtin = require("telescope.builtin")
+        local actions = require("telescope.actions")
+        local action_state = require("telescope.actions.state")
+
+        local function find_command()
+            if vim.fn.executable("rg") == 1 then
+                return { "rg", "--files", "--color", "never", "-g", "!.git" }
+            elseif vim.fn.executable("fd") == 1 then
+                return { "fd", "--type", "f", "--color", "never", "-E", ".git" }
+            elseif vim.fn.executable("fdfind") == 1 then
+                return { "fdfind", "--type", "f", "--color", "never", "-E", ".git" }
+            elseif vim.fn.executable("find") == 1 and vim.fn.has("win32") == 0 then
+                return { "find", ".", "-type", "f" }
+            elseif vim.fn.executable("where") == 1 then
+                return { "where", "/r", ".", "*" }
+            end
+        end
+
+        local function open_with_trouble(...)
+            local ok, trouble = pcall(require, "trouble.sources.telescope")
+            if ok then
+                return trouble.open(...)
+            end
+        end
+
+        local function find_files(opts)
+            opts = opts or {}
+            opts.cwd = opts.cwd or root.root()
+            builtin.find_files(opts)
+        end
+
+        local function live_grep(opts)
+            opts = opts or {}
+            opts.cwd = opts.cwd or root.root()
+            builtin.live_grep(opts)
+        end
+
+        local function grep_string(opts)
+            opts = opts or {}
+            opts.cwd = opts.cwd or root.root()
+            builtin.grep_string(opts)
+        end
+
+        local function find_files_no_ignore()
+            find_files({ no_ignore = true, default_text = action_state.get_current_line() })
+        end
+
+        local function find_files_with_hidden()
+            find_files({ hidden = true, default_text = action_state.get_current_line() })
+        end
+
         require("telescope").setup({
-            -- You can put your default mappings / updates / etc. in here
-            --  All the info you're looking for is in `:help telescope.setup()`
-            --
-            -- defaults = {
-            --   mappings = {
-            --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-            --   },
-            -- },
-            -- pickers = {}
+            defaults = {
+                get_selection_window = function()
+                    local wins = vim.api.nvim_list_wins()
+                    table.insert(wins, 1, vim.api.nvim_get_current_win())
+                    for _, win in ipairs(wins) do
+                        local buf = vim.api.nvim_win_get_buf(win)
+                        if vim.bo[buf].buftype == "" then
+                            return win
+                        end
+                    end
+                    return 0
+                end,
+                mappings = {
+                    i = {
+                        ["<c-t>"] = open_with_trouble,
+                        ["<a-t>"] = open_with_trouble,
+                        ["<a-i>"] = find_files_no_ignore,
+                        ["<a-h>"] = find_files_with_hidden,
+                        ["<C-Down>"] = actions.cycle_history_next,
+                        ["<C-Up>"] = actions.cycle_history_prev,
+                        ["<C-f>"] = actions.preview_scrolling_down,
+                        ["<C-b>"] = actions.preview_scrolling_up,
+                    },
+                    n = {
+                        ["q"] = actions.close,
+                    },
+                },
+            },
+            pickers = {
+                find_files = {
+                    find_command = find_command,
+                    hidden = true,
+                },
+            },
             extensions = {
                 ["ui-select"] = {
                     require("telescope.themes").get_dropdown(),
@@ -67,46 +157,57 @@ return { { -- Fuzzy Finder (files, lsp, etc)
         pcall(require("telescope").load_extension, "fzf")
         pcall(require("telescope").load_extension, "ui-select")
 
-        -- See `:help telescope.builtin`
-        local builtin = require("telescope.builtin")
-        vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-        vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-        vim.keymap.set("n", "<leader>sf", function()
-            builtin.find_files({ cwd = root.root() })
-        end, { desc = "[S]earch [F]iles (Root Dir)" })
-        vim.keymap.set("n", "<leader>sF", builtin.find_files, { desc = "[S]earch [F]iles (cwd)" })
-        vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
-        vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-        vim.keymap.set("n", "<leader>sg", function()
-            builtin.live_grep({ cwd = root.root() })
-        end, { desc = "[S]earch by [G]rep (Root Dir)" })
-        vim.keymap.set("n", "<leader>sG", builtin.live_grep, { desc = "[S]earch by [G]rep (cwd)" })
-        vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-        vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-        vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-        vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+        -- file
+        vim.keymap.set("n", "<leader><space>", find_files, { desc = "Find Files (Root Dir)" })
+        vim.keymap.set("n", "<leader>,", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", { desc = "Switch Buffer" })
+        vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers sort_mru=true sort_lastused=true ignore_current_buffer=true<cr>", { desc = "Buffers" })
+        vim.keymap.set("n", "<leader>fB", builtin.buffers, { desc = "Buffers (all)" })
+        vim.keymap.set("n", "<leader>fc", function() find_files({ cwd = vim.fn.stdpath("config") }) end, { desc = "Find Config File" })
+        vim.keymap.set("n", "<leader>ff", find_files, { desc = "Find Files (Root Dir)" })
+        vim.keymap.set("n", "<leader>fF", builtin.find_files, { desc = "Find Files (cwd)" })
+        vim.keymap.set("n", "<leader>fg", builtin.git_files, { desc = "Find Files (git-files)" })
+        vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Recent" })
+        vim.keymap.set("n", "<leader>fR", function() builtin.oldfiles({ cwd = vim.uv.cwd() }) end, { desc = "Recent (cwd)" })
 
-        -- Slightly advanced example of overriding default behavior and theme
+        -- git
+        vim.keymap.set("n", "<leader>gc", builtin.git_commits, { desc = "Commits" })
+        vim.keymap.set("n", "<leader>gl", builtin.git_commits, { desc = "Commits" })
+        vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Status" })
+        vim.keymap.set("n", "<leader>gS", builtin.git_stash, { desc = "Git Stash" })
+
+        -- search
+        vim.keymap.set("n", '<leader>s"', builtin.registers, { desc = "Registers" })
+        vim.keymap.set("n", "<leader>s/", builtin.search_history, { desc = "Search History" })
+        vim.keymap.set("n", "<leader>sa", builtin.autocommands, { desc = "Auto Commands" })
+        vim.keymap.set("n", "<leader>sb", builtin.current_buffer_fuzzy_find, { desc = "Buffer Lines" })
+        vim.keymap.set("n", "<leader>sc", builtin.command_history, { desc = "Command History" })
+        vim.keymap.set("n", "<leader>sC", builtin.commands, { desc = "Commands" })
+        vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "Diagnostics" })
+        vim.keymap.set("n", "<leader>sD", function() builtin.diagnostics({ bufnr = 0 }) end, { desc = "Buffer Diagnostics" })
+        vim.keymap.set("n", "<leader>sf", find_files, { desc = "Files (Root Dir)" })
+        vim.keymap.set("n", "<leader>sF", builtin.find_files, { desc = "Files (cwd)" })
+        vim.keymap.set("n", "<leader>sg", live_grep, { desc = "Grep (Root Dir)" })
+        vim.keymap.set("n", "<leader>sG", builtin.live_grep, { desc = "Grep (cwd)" })
+        vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "Help Pages" })
+        vim.keymap.set("n", "<leader>sH", builtin.highlights, { desc = "Search Highlight Groups" })
+        vim.keymap.set("n", "<leader>sj", builtin.jumplist, { desc = "Jumplist" })
+        vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "Key Maps" })
+        vim.keymap.set("n", "<leader>sl", builtin.loclist, { desc = "Location List" })
+        vim.keymap.set("n", "<leader>sM", builtin.man_pages, { desc = "Man Pages" })
+        vim.keymap.set("n", "<leader>sm", builtin.marks, { desc = "Jump to Mark" })
+        vim.keymap.set("n", "<leader>so", builtin.vim_options, { desc = "Options" })
+        vim.keymap.set("n", "<leader>sR", builtin.resume, { desc = "Resume" })
+        vim.keymap.set("n", "<leader>sq", builtin.quickfix, { desc = "Quickfix List" })
+        vim.keymap.set("n", "<leader>ss", builtin.lsp_document_symbols, { desc = "Goto Symbol" })
+        vim.keymap.set("n", "<leader>sS", builtin.lsp_dynamic_workspace_symbols, { desc = "Goto Symbol (Workspace)" })
+        vim.keymap.set("n", "<leader>sw", grep_string, { desc = "Word (Root Dir)" })
+        vim.keymap.set("n", "<leader>sW", builtin.grep_string, { desc = "Word (cwd)" })
+        vim.keymap.set("x", "<leader>sw", grep_string, { desc = "Selection (Root Dir)" })
+        vim.keymap.set("x", "<leader>sW", builtin.grep_string, { desc = "Selection (cwd)" })
+        vim.keymap.set("n", "<leader>uC", function() builtin.colorscheme({ enable_preview = true }) end, { desc = "Colorscheme with Preview" })
+
         vim.keymap.set("n", "<leader>/", function()
-            -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-            builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-                winblend = 10,
-                previewer = false,
-            }))
-        end, { desc = "[/] Fuzzily search in current buffer" })
-
-        -- It's also possible to pass additional configuration options.
-        --  See `:help telescope.builtin.live_grep()` for information about particular keys
-        vim.keymap.set("n", "<leader>s/", function()
-            builtin.live_grep({
-                grep_open_files = true,
-                prompt_title = "Live Grep in Open Files",
-            })
-        end, { desc = "[S]earch [/] in Open Files" })
-
-        -- Shortcut for searching your Neovim configuration files
-        vim.keymap.set("n", "<leader>sn", function()
-            builtin.find_files({ cwd = vim.fn.stdpath("config") })
-        end, { desc = "[S]earch [N]eovim files" })
+            live_grep()
+        end, { desc = "Grep (Root Dir)" })
     end,
 } }
