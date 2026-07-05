@@ -99,5 +99,5 @@ opt.wrap = false
 -- Enable break indent
 opt.breakindent = true
 
--- auto change directory (user preference)
-opt.autochdir = true
+-- Project roots are handled explicitly by config.root.
+opt.autochdir = false

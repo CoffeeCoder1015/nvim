@@ -3,6 +3,7 @@
 -- See `:help vim.keymap.set()`
 
 local map = vim.keymap.set
+local root = require("config.root")
 
 -- better up/down (wraps on long lines)
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -131,7 +132,7 @@ end
 
 -- lazygit
 if vim.fn.executable("lazygit") == 1 then
-  map("n", "<leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
+  map("n", "<leader>gg", function() Snacks.lazygit({ cwd = root.git_root() }) end, { desc = "Lazygit (Root Dir)" })
   map("n", "<leader>gG", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
 end
 
@@ -144,9 +145,9 @@ map("n", "<leader>uI", function() vim.treesitter.inspect_tree() vim.api.nvim_inp
 
 -- floating terminal
 map("n", "<leader>fT", function() Snacks.terminal() end, { desc = "Terminal (cwd)" })
-map("n", "<leader>ft", function() Snacks.terminal() end, { desc = "Terminal (Root Dir)" })
-map({"n","t"}, "<c-/>", function() Snacks.terminal() end, { desc = "Terminal (Root Dir)" })
-map({"n","t"}, "<c-_>", function() Snacks.terminal() end, { desc = "which_key_ignore" })
+map("n", "<leader>ft", function() Snacks.terminal(nil, { cwd = root.root() }) end, { desc = "Terminal (Root Dir)" })
+map({"n","t"}, "<c-/>", function() Snacks.terminal(nil, { cwd = root.root() }) end, { desc = "Terminal (Root Dir)" })
+map({"n","t"}, "<c-_>", function() Snacks.terminal(nil, { cwd = root.root() }) end, { desc = "which_key_ignore" })
 
 -- Exit terminal mode
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })

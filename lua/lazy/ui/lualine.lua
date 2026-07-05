@@ -11,6 +11,14 @@ return {
     end
   end,
   opts = function()
+    local function root_dir()
+      local root = require("config.root").root()
+      if not root then
+        return ""
+      end
+      return vim.fn.fnamemodify(root, ":t")
+    end
+
     local function macro_recording()
       local register = vim.fn.reg_recording()
       if register == "" then
@@ -29,6 +37,7 @@ return {
         lualine_a = { "mode" },
         lualine_b = { "branch" },
         lualine_c = {
+          root_dir,
           {
             "diagnostics",
             symbols = {

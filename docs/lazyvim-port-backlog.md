@@ -11,11 +11,11 @@ its own git commit.
 
 ## 1. Project Root Behavior
 
-- [ ] Replace `opt.autochdir = true` with an explicit root helper.
-- [ ] Detect roots from attached LSP clients, `.git`, project markers, and cwd.
-- [ ] Add a `:NvimRoot` command that reports or switches to the detected root.
-- [ ] Expose `root()` and `git_root()` helpers for other config modules.
-- [ ] Wire root helpers into terminals, lazygit, pickers, Neo-tree, and lualine.
+- [x] Replace `opt.autochdir = true` with an explicit root helper.
+- [x] Detect roots from attached LSP clients, `.git`, project markers, and cwd.
+- [x] Add a `:NvimRoot` command that reports or switches to the detected root.
+- [x] Expose `root()` and `git_root()` helpers for other config modules.
+- [x] Wire root helpers into terminals, lazygit, pickers, Neo-tree, and lualine.
 
 ## 2. Picker Ergonomics
 

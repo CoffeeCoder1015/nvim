@@ -6,5 +6,6 @@ require("config.options")
 require("lazy.lazy")
 
 -- Load keymaps and autocmds after plugins
+require("config.root").setup()
 require("config.keymaps")
 require("config.autocmds")

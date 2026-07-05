@@ -12,10 +12,22 @@ return {
   },
   cmd = 'Neotree',
   keys = {
-    { '\\', ':Neotree reveal<CR>', { desc = 'NeoTree reveal' } },
+    {
+      '\\',
+      function()
+        require("neo-tree.command").execute({
+          action = "focus",
+          reveal = true,
+          dir = require("config.root").root(),
+        })
+      end,
+      desc = 'NeoTree reveal',
+    },
   },
   opts = {
     filesystem = {
+      bind_to_cwd = false,
+      follow_current_file = { enabled = true },
       window = {
         mappings = {
           ['\\'] = 'close_window',
