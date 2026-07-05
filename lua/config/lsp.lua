@@ -117,6 +117,9 @@ function M.on_attach(event)
 	map("n", "<leader>rn", vim.lsp.buf.rename, "Rename", "rename")
 	map("n", "<leader>ds", telescope.lsp_document_symbols, "Document Symbols", "documentSymbol")
 	map("n", "<leader>ws", telescope.lsp_dynamic_workspace_symbols, "Workspace Symbols", "workspace/symbol")
+	if client and client.name == "clangd" then
+		map("n", "<leader>ch", "<cmd>LspClangdSwitchSourceHeader<cr>", "Switch Source/Header")
+	end
 
 	if supports(client, "documentHighlight", bufnr) then
 		local highlight_augroup = vim.api.nvim_create_augroup("config-lsp-highlight", { clear = false })

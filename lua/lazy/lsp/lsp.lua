@@ -47,12 +47,90 @@ return {
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
 				-- clangd = {},
-				gopls = {},
+				gopls = {
+					init_options = {
+						semanticTokens = true,
+					},
+					settings = {
+						gopls = {
+							gofumpt = true,
+							codelenses = {
+								generate = true,
+								regenerate_cgo = true,
+								run_govulncheck = true,
+								test = true,
+								tidy = true,
+								upgrade_dependency = true,
+								vendor = true,
+							},
+							hints = {
+								assignVariableTypes = true,
+								compositeLiteralFields = true,
+								compositeLiteralTypes = true,
+								constantValues = true,
+								functionTypeParameters = true,
+								parameterNames = true,
+								rangeVariableTypes = true,
+							},
+							analyses = {
+								nilness = true,
+								unusedparams = true,
+								unusedwrite = true,
+								useany = true,
+							},
+							usePlaceholders = true,
+							completeUnimported = true,
+							staticcheck = true,
+							directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+						},
+					},
+				},
 				-- pyright = {},
-				rust_analyzer = {},
+				rust_analyzer = {
+					settings = {
+						["rust-analyzer"] = {
+							cargo = {
+								allFeatures = true,
+								loadOutDirsFromCheck = true,
+								buildScripts = { enable = true },
+							},
+							checkOnSave = true,
+							procMacro = { enable = true },
+							files = {
+								exclude = {
+									".direnv",
+									".git",
+									".jj",
+									".github",
+									".gitlab",
+									"bin",
+									"node_modules",
+									"target",
+									"venv",
+									".venv",
+								},
+								watcher = "client",
+							},
+						},
+					},
+				},
 				clangd = {
+					cmd = {
+						"clangd",
+						"--background-index",
+						"--clang-tidy",
+						"--header-insertion=iwyu",
+						"--completion-style=detailed",
+						"--function-arg-placeholders",
+						"--fallback-style=llvm",
+					},
 					capabilities = {
 						offsetEncoding = { "utf-16" },
+					},
+					init_options = {
+						usePlaceholders = true,
+						completeUnimported = true,
+						clangdFileStatus = true,
 					},
 				},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -93,6 +171,10 @@ return {
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+				"goimports",
+				"gofumpt",
+				"golangci-lint",
+				"codelldb",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 

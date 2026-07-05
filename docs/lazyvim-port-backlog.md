@@ -92,12 +92,12 @@ its own git commit.
 
 ## 10. Language Extras
 
-- [ ] Port Go-specific LSP, format, lint, DAP, and test behavior as needed.
-- [ ] Port Rust-specific behavior as needed.
-- [ ] Port C/C++ clangd behavior as needed.
-- [ ] Port TypeScript behavior as needed.
-- [ ] Port Python behavior as needed.
-- [ ] Add other language extras only when a real workflow needs them.
+- [x] Port Go-specific LSP, format, lint, and existing DAP behavior as needed.
+- [x] Port Rust-specific behavior as needed.
+- [x] Port C/C++ clangd behavior as needed.
+- [x] Defer TypeScript behavior until a real TypeScript workflow needs it.
+- [x] Defer Python behavior until a real Python workflow needs it.
+- [x] Add other language extras only when a real workflow needs them.
 
 ## 11. Utility Extras
 
